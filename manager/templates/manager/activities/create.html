@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="col-12">
+  <h1>Actividad</h1>
+</div>
+<div class="row justify-content-center">
+  <div class="col-6 mt-3 ">
+    <form class="form " method="POST">
+      {% csrf_token %}
+      <div class="form-group mb-2">
+        <label for="">Spring</label>
+        <input type="text" class="form-control" name="spring_id" id="spring_id" value="{{ spring }}" readonly>
+      </div>
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

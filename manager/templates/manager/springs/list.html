@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div class="col-12">
+    <h1>{{ proyect.name }} | Springs</h1>
+  </div>
+  <div class="col-12 mt-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Proyecto</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Fecha Inicio</th>
+          <th scope="col">Fecha Fin</th>
+          <th scope="col">Total de Horas</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        {% for spring in springs %}
+          <tr>
+            <td>{{ spring.proyect }}</td>
+            <td>{{ spring.name }}</td>
+            <td>{{ spring.start_date|date:"d/M/y" }}</td>
+            
+            {% if spring.end_date is None %}
+              <td>-</td>
+            {% else %}
+              <td>{{ spring.end_date }}</td>
+            {% endif %}
+            <td>{{ spring.total_jhours }}</td>
+            <td>
+              <a href="{% url 'activities' spring.pk %}" class="btn btn-primary"><i class="fa-solid fa-list"></i></a>
+              <a href="#" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+              <a href="#" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+            </td>
+          </tr>
+        {% endfor %}
+          
+      </tbody>
+    </table>
+  </div>
+{% endblock content %}

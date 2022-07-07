@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="col-12">
+    
+  <div class="row">
+    <div class="col-11">
+      <h1>Actividades </h1>
+    </div>
+    <div class="col-1">
+      <a href="{% url 'activity-create' spring %}" class="btn btn-primary m-2"><i class="fa-solid fa-square-plus"></i></a>
+    </div>
+  </div>
+
+</div>
+  <div class="col-12 mt-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">UT</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Fase</th>
+          <th scope="col">Fecha Inicio</th>
+          <th scope="col">Fecha Fin</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        {% for activity in activities %}
+          <tr>
+            <td>{{ activity.name }}</td>
+            <td>{{ activity.ut }}</td>
+            <td>{{ activity.type }}</td>
+            <td>{{ activity.project_phase }}</td>
+            <td>{{ activity.start_date|date:"d/M/y" }}</td>
+            
+            {% if activity.end_date is None %}
+              <td>-</td>
+            {% else %}
+              <td>{{ activity.end_date|date:"d/M/y" }}</td>
+            {% endif %}
+            <td>
+              <a href="#" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+              <a href="#" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+            </td>
+          </tr>
+        {% endfor %}
+          
+      </tbody>
+    </table>
+  </div>
+{% endblock content %}

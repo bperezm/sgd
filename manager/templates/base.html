@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{%block title %}{%endblock title%}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          {% include 'navbar.html' %}
+        </div> 
+      </div>
+      <div class="row mt-3">
+        {% block content %}
+      
+        {% endblock content %}
+      </div>
+    </div>
+  
+  <!-- Bootstrap JS -->
+  <script src="{% static 'assets/bootstrap/js/bootstrap.bundle.js' %}"></script>
+  <!-- FontAwesome -->
+  <script src="https://kit.fontawesome.com/6f4d60b362.js" crossorigin="anonymous"></script>
+</body>
+</html>

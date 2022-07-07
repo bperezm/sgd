@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div class="col-12">
+    
+      <div class="row">
+        <div class="col-11">
+          <h1>Proyectos</h1>
+        </div>
+        <div class="col-1">
+          <a href="{% url 'proyect-create' %}" class="btn btn-primary m-2"><i class="fa-solid fa-square-plus"></i></a>
+        </div>
+      </div>
+   
+  </div>
+  <div class="col-12 mt-3">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nombre</th>
+          <th scope="col">Siglas</th>
+          <th scope="col">Fecha Inicio</th>
+          <th scope="col">Fecha Fin</th>
+          <th scope="col">Estatus</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        {% for proyect in proyects %}
+          <tr>
+            <td>{{ proyect.name }}</td>
+            <td>{{ proyect.acronym }}</td>
+            <td>{{ proyect.start_date|date:"d/M/y" }}</td>
+            
+            {% if proyect.end_date is None %}
+              <td>-</td>
+            {% else %}
+              <td>{{ proyect.end_date }}</td>
+            {% endif %}
+            <td>{{ proyect.status }}</td>
+            <td>
+              <a href="{% url 'springs-list' proyect.pk %}" class="btn btn-success"><i class="fa-solid fa-flag"></i></a>
+              <a href="#" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i></a>
+              <a href="#" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+            </td>
+          </tr>
+        {% endfor %}
+          
+      </tbody>
+    </table>
+  </div>
+{% endblock content %}
+  
