@@ -15,55 +15,69 @@ class Managment_activities:
         self.project_phase = project_phase
 
 
-    def get_start_date_spring(self):
+    def get_fecha_inicio_spring(self):
+        """Obtine la fecha inicio del spring
+
+        Returns:
+            date: fecha inicio
+        """
         spring = Spring.objects.get(pk=self.spring)
 
         return spring.start_date
 
-    def get_hours_developer(self):
-        """
-        Obtiene las horas que va a trabajar el desarrollador en el spring
+    def get_horas_trabajo_desarrollador(self):
+        """Obtiene las horas de trabajo configuradas para el spring
+
+        Returns:
+            int: horas
         """
         spring_hours = SpringConfiguration.objects.get(pk=self.spring)
         spring_hours_developer = spring_hours.working_hours
 
         return spring_hours_developer
 
-    def get_activities(self):
-        """ 
-        Obtiene todas las actividades del spring
+    def get_actividades(self):
+        """Obtiene todas las actividades del spring
+
+        Returns:
+            object: actividades
         """
         activities = Activity.objects.filter(spring=self.spring)
 
         return activities
     
-    def hours_to_days(self):
-        """ Convert the hours of a activity in days
+    def convierte_horas_a_dias(self):
+        """Convierte las horas de la actividad en dias
 
         Returns:
-            int or float: days 
+            float: dias
         """
-        days = self.ut / self.get_hours_developer()
+        days = self.ut / self.get_horas_trabajo_desarrollador()
         return days
     
-    def days_and_hours(self):
-        """ Convert the decimal part of a day to hours
+    def convierte_parte_decimal_de_dias_a_horas(self):
+        """Convierte la parte decimal de los dias en horas en caso de existir
 
         Returns:
-            int : hours
-            int: days
+            horas: int
+            dias: int
         """
-        days = self.hours_to_days()
+        days = self.convierte_horas_a_dias()
         hours, days = math.modf(days)
         
         if hours != 0:
-            hours = hours * self.get_hours_developer()
+            hours = hours * self.get_horas_trabajo_desarrollador()
        
         
         return hours
 
-    def get_accumlated_hours(self):
-        actividades = self.get_activities()
+    def get_horas_acumuladas(self):
+        """Obtiene las horas de las actividades registradas en el spring
+
+        Returns:
+            int: horas acumuladas
+        """
+        actividades = self.get_actividades()
         horas_acumuladas = 0
 
         for actividad in actividades:
@@ -71,35 +85,42 @@ class Managment_activities:
         
         return horas_acumuladas
 
-    def get_horas_acumuladas_a_dias(self):
-        horas_acumuladas = self.get_accumlated_hours() / self.get_hours_developer()
+    def convierte_horas_acumuladas_a_dias(self):
+        """Calculas los dias totales de las horas acumuladas en el spring
 
-        return horas_acumuladas
+        Returns:
+            int: dias
+        """
+        dias_totales = self.get_horas_acumuladas() / self.get_horas_trabajo_desarrollador()
+
+        return dias_totales
         
-    
-    def cacula_fecha_inicio(self):
-        fecha_inicio_spring = self.get_start_date_spring()
-        horas_acumuladas_dias = self.get_horas_acumuladas_a_dias()
+    def cacula_fecha_inicio_actividad(self):
+        """Calcula la fecha inicio para la actividad entrante
+
+        Returns:
+            date: fecha inicio para actividad
+        """
+        fecha_inicio_spring = self.get_fecha_inicio_spring()
+        dias_totales = self.convierte_horas_acumuladas_a_dias()
         
-        fecha_inicio_actividad = fecha_inicio_spring + timedelta(days=horas_acumuladas_dias)
+        fecha_inicio_actividad = fecha_inicio_spring + timedelta(days=dias_totales)
         
         return fecha_inicio_actividad
 
-
-    
-    def calcula_fecha_fin(self, fecha_inicio):
+    def calcula_fecha_fin_actividad(self, fecha_inicio):
         """ Calculate the end date from days hours
 
         Returns:
             date: end date of activity
         """
-        dias_actividad = self.hours_to_days()
-        dias_acumulados = self.get_horas_acumuladas_a_dias()
+        dias_actividad = self.convierte_horas_a_dias()
+        dias_acumulados = self.convierte_horas_acumuladas_a_dias()
 
         dias_totales = dias_actividad + dias_acumulados
-        print('DIAS TOTALES: ', dias_totales)
+        dias_decimal, dias_entera = math.modf(dias_totales)
         if fecha_inicio != None:
-            end_date = fecha_inicio + timedelta(days=dias_actividad)
+            end_date = fecha_inicio + timedelta(days=dias_totales)
        
         return end_date
 

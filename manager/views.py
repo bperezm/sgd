@@ -65,33 +65,33 @@ class ActivityCreateView(View):
             project_phase = form.cleaned_data['project_phase']
             intance_spring = Spring.objects.get(pk=spring)
             validate = Managment_activities(spring, name, ut, type, project_phase)
-            validate.get_start_date_spring()
+            
 
-            if len(validate.get_activities()) == 0:
+            if len(validate.get_actividades()) == 0:
                 print('Es la primera actividad')
                 return HttpResponse("Se creo la actividad")
             else:
-                fecha_inicio_spring = validate.get_start_date_spring()
+                fecha_inicio_spring = validate.get_fecha_inicio_spring()
                 print('fecha inicio del spring: {}'.format(fecha_inicio_spring))
 
-                horas_acumuladas_spring = validate.get_accumlated_hours()
+                horas_acumuladas_spring = validate.get_horas_acumuladas()
                 print('Horas acumuladas en el spring {} horas'.format(horas_acumuladas_spring))
 
-                horas_acumuladas_a_dias = validate.get_horas_acumuladas_a_dias()
+                horas_acumuladas_a_dias = validate.convierte_horas_acumuladas_a_dias()
                 print('Las horas acumuladas del spring equivalen a {} dias'.format(horas_acumuladas_a_dias))
                 
                 print('UT ingresadas {}'.format(ut))
 
-                horas_actividad_a_dias = validate.hours_to_days()
+                horas_actividad_a_dias = validate.convierte_horas_a_dias()
                 print('Las ut ingresadas equivalen a: {} dias'.format(horas_actividad_a_dias))
 
-                parte_decimal_a_horas = validate.days_and_hours()
+                parte_decimal_a_horas = validate.convierte_parte_decimal_de_dias_a_horas()
                 print('La parte decimal equivale a {} horas'.format(parte_decimal_a_horas))
 
-                fecha_inicio_actividad = validate.cacula_fecha_inicio()
+                fecha_inicio_actividad = validate.cacula_fecha_inicio_actividad()
                 print('La fecha inicio de la actividad es {}'.format(fecha_inicio_actividad))
 
-                fecha_fin_actividad = validate.calcula_fecha_fin(fecha_inicio_actividad)
+                fecha_fin_actividad = validate.calcula_fecha_fin_actividad(fecha_inicio_spring)
                 print('La fecha fin de la actividad es {}'.format(fecha_fin_actividad))
 
                 actividad = Activity(name=name, spring=intance_spring, ut=ut, type=type, project_phase=project_phase,start_date=fecha_inicio_actividad, end_date=fecha_fin_actividad )
